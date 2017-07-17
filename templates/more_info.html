@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+	<title>Cavatica Usage</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"/>
+</head>
+<body>
+<h1> Cavatica User Data </h1>
+<div class="divTable">
+	<div class="divTableBody">
+		<div class="divTableRow">
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='username', switch=switch) }}">Username</a></div>
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='affiliation', switch=switch ) }}">Affiliation</a></div>
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='timecr', switch=switch ) }}">Time Created</a></div>
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='email', switch=switch ) }}">Email</a></div>
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='first', switch=switch ) }}">First Name</a></div>
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=date, sort='last', switch=switch ) }}">Last Name</a></div>
+		</div>
+		{% for i in range(1,numrows) %}
+		<div class="divTableRow">
+			<div class="divTableCell">{{rows[i][0]|safe}}</div>
+			<div class="divTableCell">{{rows[i][1]|safe}}</div>
+      <div class="divTableCell">{{rows[i][2]|safe}}</div>
+      <div class="divTableCell">{{rows[i][3]|safe}}</div>
+      <div class="divTableCell">{{rows[i][4]|safe}}</div>
+      <div class="divTableCell">{{rows[i][5]|safe}}</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+</body>
