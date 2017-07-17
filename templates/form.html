@@ -1,0 +1,15 @@
+<head>
+	<title>Cavatica Usage</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"/>
+</head>
+<body>
+<h1> Cavatica User Data </h1>
+<form action="{{ url_for('index_res') }}" method="post">
+		Start Date:<br>
+		<input type="text" name="start" value="yyyy-mm-dd"><br>
+		End Date:<br>
+		<input type="text" name="end" value="yyyy-mm-dd">
+		<br>
+		<input type="submit" value="Submit">
+</form>
+</body>

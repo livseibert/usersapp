@@ -1,0 +1,38 @@
+<!doctype html>
+<head>
+	<title>Cavatica Usage</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"/>
+</head>
+<body>
+<h1> Cavatica User Data </h1>
+<form action="{{ url_for('index_res') }}" method="post">
+		Start Date:<br>
+		<input type="text" name="start" value="yyyy-mm-dd"><br>
+		End Date:<br>
+		<input type="text" name="end" value="yyyy-mm-dd">
+		<br>
+		<input type="submit" value="Submit">
+</form>
+<br>
+{% if rows>0 %}
+<div class="divTable" style="width: 25%;">
+	<div class="divTableBody">
+		<div class="divTableRow">
+			<div class="divTableCell">Date</div>
+			<div class="divTableCell"># of Users</div>
+		</div>
+{% endif %}
+		{% for i in range(rows) %}
+		<div class="divTableRow">
+			<div class="divTableCell"><a href="{{ url_for('.more_info', date=names[i], sort='none', switch=1 ) }}">{{dates[i].date()}}</a></div>
+			<div class="divTableCell">{{counts[i]}}</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% if rows>0 %}
+<br>
+<img src="{{ url_for('static', filename = 'graph.png', v=today) }}"/>
+{% endif %}
+<br>
+</body>
