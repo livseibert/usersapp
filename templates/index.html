@@ -5,16 +5,18 @@
 </head>
 <body>
 <h1> Cavatica User Data </h1>
-<p><a href="{{url_for('index')}}">New Search</a></p>
+<div class="button">
+<a href="{{url_for('index')}}" class="button">New Search</a>
+</div>
 <br>
-{% if rows>0 %}
-<div class="divTable" style="width: 25%;">
+<div class="all">
+<div class="table">
+<div class="divTable">
 	<div class="divTableBody">
 		<div class="divTableRow">
 			<div class="divTableCell">Date</div>
 			<div class="divTableCell"># of Users</div>
 		</div>
-{% endif %}
 		{% for i in range(rows) %}
 		<div class="divTableRow">
 			<div class="divTableCell"><a href="{{ url_for('.more_info', date=names[i], sort='none', switch=1 ) }}">{{dates[i].date()}}</a></div>
@@ -23,9 +25,9 @@
 		{% endfor %}
 	</div>
 </div>
-{% if rows>0 %}
-<br>
+</div>
+<div class="image">
 <img src="{{ url_for('static', filename = 'graph.png', v=today) }}"/>
-{% endif %}
-<br>
+</div>
+</div>
 </body>
