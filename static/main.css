@@ -100,6 +100,7 @@ div.button{
 a.button {
 	background-color: #f2f2f2;
 	border: none;
+	font-family: "Helvetica";
 	color: black;
 	padding: 15px 32px;
 	text-align: center;
@@ -114,6 +115,18 @@ a.button:visited {
 	color: black;
 }
 
+button {
+	background-color: #f2f2f2;
+	border: none;
+	color: black;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+}
 .divTableHeading {
 	background-color: #EEE;
 	display: table-header-group;

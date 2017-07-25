@@ -27,7 +27,9 @@
 </div>
 </div>
 <div class="image">
+{% if rows>0 %}
 <img src="{{ url_for('static', filename = 'graph.png', v=today) }}"/>
+{% endif %}
 </div>
 </div>
 </body>

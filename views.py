@@ -3,12 +3,16 @@ from datetime import datetime, date, timedelta
 import csv, codecs
 import matplotlib.pyplot as plt
 import numpy as np
+import os, os.path, sys
 
 app = Flask(__name__)
 app.secret_key = 'sec_key'
 
 @app.route('/')
 def index():
+    url="/Users/liviaseibert/usersapp/static/graph.png"
+    if os.path.isfile(url):
+        os.remove(url)
     return render_template('form.html')
 
 @app.route('/results', methods = ['POST'])
@@ -34,17 +38,21 @@ def index_res():
         for row in csv_f:
             count += 1
         counts.append(count)
-    d=np.array(dates)
-    u=np.array(counts)
+    update_plot(dates, counts)
+    timestr = datetime.now().strftime("%H%M%S")
+    return render_template('index.html', dates=dates, counts=counts, rows=rows, names=names, today=timestr)
+
+def update_plot(da, c):
+    d=np.array(da)
+    u=np.array(c)
     plt.plot(d,u)
     plt.xticks(rotation=90)
     plt.tight_layout()
     plt.xlabel('dates')
     plt.ylabel('users')
     plt.title('Date vs. Users')
-    timestr = datetime.now().strftime("%H%M%S")
     plt.savefig('/Users/liviaseibert/usersapp/static/graph.png')
-    return render_template('index.html', dates=dates, counts=counts, rows=rows, names=names, today=timestr)
+    plt.close()
 
 @app.route('/more_info/<date>/<sort>/<switch>')
 def more_info(date, sort, switch):
