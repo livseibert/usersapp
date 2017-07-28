@@ -9,8 +9,8 @@ app = Flask(__name__)
 app.secret_key = 'sec_key'
 
 app.config.update(dict(
-    DATA_PATH="/path/to/cavatica/users/data",
-    STATIC_PATH="/path/to/app/content/static"
+    DATA_PATH="/Users/liviaseibert/usersapp/data",
+    STATIC_PATH="/Users/liviaseibert/usersapp/static"
 ))
 
 @app.route('/')
@@ -33,26 +33,47 @@ def index_res():
         start_date += step
     counts=[]
     names=[]
+    e_dates=[]
+    show_li=[]
     rows=len(dates)
     for date in dates:
         count=0
         csv_name=os.path.join(app.config['DATA_PATH'], date.strftime('%Y-%m-%d')+'-cavatica_users.csv')
         names.append(date.strftime('%Y-%m-%d'))
-        f = open(csv_name)
-        csv_f = csv.reader(f)
-        for row in csv_f:
-            count += 1
-        counts.append(count)
-    update_plot(dates, counts)
+        if os.path.isfile(csv_name):
+            f = open(csv_name)
+            csv_f = csv.reader(f)
+            for row in csv_f:
+                count += 1
+            counts.append(count)
+            show_li.append(True)
+        else:
+            counts.append("no data")
+            e_dates.append(date)
+            show_li.append(False)
+    if len(dates)==len(e_dates):
+        yes=False
+    else:
+        yes=True
+        update_plot(dates, counts, e_dates)
     timestr = datetime.now().strftime("%H%M%S")
-    return render_template('index.html', dates=dates, counts=counts, rows=rows, names=names, today=timestr)
+    return render_template('index.html', dates=dates, counts=counts, rows=rows, names=names, today=timestr, yes=yes, show_li=show_li)
 
-def update_plot(da, c):
+def update_plot(da, c, e):
     background_color = '#2f3f4f'
     text_color = '#ffffff'
     graph_color = '#7fffd4'
-    d=np.array(da)
-    u=np.array(c)
+    new_dates=[]
+    nums=list(c)
+    while "no data" in nums:
+        nums.remove("no data")
+    new_dates=[elem for elem in da if elem not in e]
+    for i in nums:
+        print i
+    for i in new_dates:
+        print i
+    d=np.array(new_dates)
+    u=np.array(nums)
     plt.plot(d, u, marker='o', color=graph_color)
     plt.xticks(rotation=45)
     plt.gcf().subplots_adjust(bottom=0.25) #Add margin on the bottom

@@ -5,6 +5,7 @@
 </head>
 <body>
 <h1> Cavatica User Data </h1>
+{% if yes==True %}
 <div class="button">
 <a href="{{url_for('index')}}" class="button">New Search</a>
 </div>
@@ -19,7 +20,11 @@
 		</div>
 		{% for i in range(rows) %}
 		<div class="divTableRow">
+			{% if show_li[i]==True %}
 			<div class="divTableCell"><a href="{{ url_for('.more_info', date=names[i], sort='none', switch=1 ) }}">{{dates[i].date()}}</a></div>
+			{% else %}
+			<div class="divTableCell">{{dates[i].date()}}</div>
+			{% endif %}
 			<div class="divTableCell">{{counts[i]}}</div>
 		</div>
 		{% endfor %}
@@ -32,4 +37,7 @@
 {% endif %}
 </div>
 </div>
+{% else %}
+<h3>No Data</h3>
+{% endif %}
 </body>
