@@ -8,9 +8,14 @@ import os, os.path, sys
 app = Flask(__name__)
 app.secret_key = 'sec_key'
 
+app.config.update(dict(
+    DATA_PATH="/path/to/cavatica/users/data",
+    STATIC_PATH="/path/to/app/content/static"
+))
+
 @app.route('/')
 def index():
-    url="/Users/liviaseibert/usersapp/static/graph.png"
+    url=os.path.join(app.config['STATIC_PATH'], 'graph.png')
     if os.path.isfile(url):
         os.remove(url)
     return render_template('form.html')
@@ -31,7 +36,7 @@ def index_res():
     rows=len(dates)
     for date in dates:
         count=0
-        csv_name='/Users/liviaseibert/usersapp/data/' + date.strftime('%Y-%m-%d')+'-cavatica_users.csv'
+        csv_name=os.path.join(app.config['DATA_PATH'], date.strftime('%Y-%m-%d')+'-cavatica_users.csv')
         names.append(date.strftime('%Y-%m-%d'))
         f = open(csv_name)
         csv_f = csv.reader(f)
@@ -43,20 +48,30 @@ def index_res():
     return render_template('index.html', dates=dates, counts=counts, rows=rows, names=names, today=timestr)
 
 def update_plot(da, c):
+    background_color = '#2f3f4f'
+    text_color = '#ffffff'
+    graph_color = '#7fffd4'
     d=np.array(da)
     u=np.array(c)
-    plt.plot(d,u)
-    plt.xticks(rotation=90)
-    plt.tight_layout()
-    plt.xlabel('dates')
-    plt.ylabel('users')
-    plt.title('Date vs. Users')
-    plt.savefig('/Users/liviaseibert/usersapp/static/graph.png')
+    plt.plot(d, u, marker='o', color=graph_color)
+    plt.xticks(rotation=45)
+    plt.gcf().subplots_adjust(bottom=0.25) #Add margin on the bottom
+    plt.xlabel('Date', color=text_color)
+    plt.ylabel('# of Users', color=text_color)
+    plt.yticks(np.arange(min(u)-5, max(u)+5, 1)) #Make ticks only integers (can't have fractions of users)
+    plt.title('# Users over Time', color=text_color)
+    ax = plt.gca()
+    ax.set_facecolor(background_color)
+    ax.tick_params(colors=text_color)
+    for spine in ax.spines.values():
+        spine.set_edgecolor(text_color)
+
+    plt.savefig(os.path.join(app.config['STATIC_PATH'], 'graph.png'), facecolor=background_color)
     plt.close()
 
 @app.route('/more_info/<date>/<sort>/<switch>')
 def more_info(date, sort, switch):
-    csv_name='/Users/liviaseibert/usersapp/data/' + date +'-cavatica_users.csv'
+    csv_name=os.path.join(app.config['DATA_PATH'], date+'-cavatica_users.csv')
     f = codecs.open(csv_name, encoding='ascii', errors='ignore')
     csv_f = csv.reader(f)
     rows=list(csv_f)
